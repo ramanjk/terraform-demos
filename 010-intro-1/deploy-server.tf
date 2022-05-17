@@ -1,12 +1,12 @@
 # Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs#argument-reference
 provider "aws" {
-  region = "ap-south-1"
+  region = var.region
 }
 
 # Reference: https://registry.terraform.io/providers/hashicorp/aws/latest/docs/resources/instance
 resource "aws_instance" "myvm1" {
-  ami           = "ami-079b5e5b3971bd10d"
-  instance_type = "t2.micro"
+  ami           = var.ami
+  instance_type = var.instance_type
 
   vpc_security_group_ids = [aws_security_group.myvm1sg.id]
 
@@ -16,10 +16,7 @@ resource "aws_instance" "myvm1" {
                 sudo systemctl enable httpd --now
                 echo "Welcome to Rathinam Trainers" | sudo tee /var/www/html/index.html
               EOF
-  tags = {
-    Name = "webserver1"
-    Application = "CRM"
-  }
+  tags = var.tags
 }
 
 resource "aws_security_group" "myvm1sg" {
@@ -28,19 +25,19 @@ resource "aws_security_group" "myvm1sg" {
     from_port = 80
     to_port   = 80
     protocol  = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ingress_source_cidr
   }
   ingress {
     from_port = 22
     to_port   = 22
     protocol  = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ingress_source_cidr
   }
   ingress {
     from_port = -1
     to_port   = -1
     protocol  = "icmp"
-    cidr_blocks = ["0.0.0.0/0"]
+    cidr_blocks = var.ingress_source_cidr
   }
   egress {
     from_port        = 0
