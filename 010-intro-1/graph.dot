@@ -1,0 +1,16 @@
+digraph {
+	compound = "true"
+	newrank = "true"
+	subgraph "root" {
+		"[root] aws_instance.myvm1 (expand)" [label = "aws_instance.myvm1", shape = "box"]
+		"[root] aws_security_group.myvm1sg (expand)" [label = "aws_security_group.myvm1sg", shape = "box"]
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"]" [label = "provider[\"registry.terraform.io/hashicorp/aws\"]", shape = "diamond"]
+		"[root] aws_instance.myvm1 (expand)" -> "[root] aws_security_group.myvm1sg (expand)"
+		"[root] aws_security_group.myvm1sg (expand)" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"]"
+		"[root] meta.count-boundary (EachMode fixup)" -> "[root] aws_instance.myvm1 (expand)"
+		"[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)" -> "[root] aws_instance.myvm1 (expand)"
+		"[root] root" -> "[root] meta.count-boundary (EachMode fixup)"
+		"[root] root" -> "[root] provider[\"registry.terraform.io/hashicorp/aws\"] (close)"
+	}
+}
+
